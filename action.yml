@@ -1,0 +1,62 @@
+name: Release with uplift
+description: Release a project using uplift
+outputs:
+  version_bump:
+    description: Did the version change?
+    value: ${{ steps.version_bump.outputs.version_bump }}
+  current_version:
+    description: The current version
+    value: ${{ steps.current_version.outputs.current_version }}
+  previous_version:
+    description: The previous version
+    value: ${{ steps.previous_version.outputs.previous_version }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v2.3.5
+      name: Checkout the repository
+      with:
+        fetch-depth: 0
+
+    - uses: gembaadvantage/uplift-action@v2
+      with:
+        version: latest
+        install-only: true
+        args: version
+
+    - name: Get previous version
+      id: previous_version
+      run: echo ::set-output "name=previous_version::$( git tag | grep "^v[0-9]+\.[0-9]+.[0-9]+" | sort -V | tail -n 1 )"
+      shell: bash
+
+    - name: Get current version
+      id: current_version
+      run: |
+        CURRENT_VERSION="$(uplift tag --next --silent)"
+        if [ -z "$CURRENT_VERSION" ] ; then
+          echo ::set-output "name=current_version::$PREV"
+        else
+          echo ::set-output "name=current_version::$CURRENT_VERSION"
+        fi
+      env:
+        PREV: ${{ steps.previous_version.outputs.previous_version }}
+      shell: bash
+
+    - name: Generate release
+      shell: bash
+      run: |
+        uplift release
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_USER: ${{ github.actor }}
+    - run: |
+        if [ "$CURR" != "$PREV" ] ; then
+          echo ::set-output "name=version_bump::true"
+        fi
+      id: version_bump
+      shell: bash
+      name: Did the version bump
+      env:
+        CURR: ${{ steps.current_version.outputs.current_version }}
+        PREV: ${{ steps.previous_version.outputs.previous_version }}
