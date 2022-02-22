@@ -47,8 +47,12 @@ runs:
     - name: Generate release
       shell: bash
       run: |
-        uplift release
+        if [ "$PREV" != "$CURR" ] ; then
+          uplift release
+        fi
       env:
+        CURR: ${{ steps.current_version.outputs.current_version }}
+        PREV: ${{ steps.previous_version.outputs.previous_version }}
         GITHUB_TOKEN: ${{ github.token }}
         GITHUB_USER: ${{ github.actor }}
     - run: |
