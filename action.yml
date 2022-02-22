@@ -34,7 +34,7 @@ runs:
     - name: Get current version
       id: current_version
       run: |
-        CURRENT_VERSION="$(uplift tag --next --silent)"
+        CURRENT_VERSION="$(uplift tag --next --silent --dry-run)"
         if [ -z "$CURRENT_VERSION" ] ; then
           echo ::set-output "name=current_version::$PREV"
         else
