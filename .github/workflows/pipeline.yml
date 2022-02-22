@@ -6,13 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  version:
-    uses: PurpleBooth/common-pipelines/.github/workflows/commit-check.yml@v0.2.0
-
   release:
     if: github.ref == 'refs/heads/main'
-    needs:
-      - version
     outputs:
       version_bump: ${{ steps.versions.outputs.version_bump }}
       current_version: ${{ steps.versions.outputs.current_version }}
