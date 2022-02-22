@@ -47,7 +47,7 @@ runs:
     - name: Generate release
       shell: bash
       run: |
-        if [ "$PREV" != "$CURR" ] ; then
+        if [ "$PREV" != "$CURR" ] || [ -z "$PREV" ] ; then
           uplift release
         fi
       env:
