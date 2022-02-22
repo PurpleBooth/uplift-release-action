@@ -20,6 +20,7 @@ runs:
         fetch-depth: 0
 
     - uses: gembaadvantage/uplift-action@v2
+      name: Install uplift
       with:
         version: latest
         install-only: true
