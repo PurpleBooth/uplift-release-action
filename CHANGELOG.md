@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.1.1] - 2022-03-02
+
+- 54ed86b fix(deps): bump actions/checkout from 2.4.0 to 3
+- cd1082e ci(uplift): uplifted for version 0.1.0
+
 ## [0.1.0] - 2022-02-22
 
 - 0b3b063 fix: dry run when getting first commit
