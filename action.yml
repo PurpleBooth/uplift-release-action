@@ -28,7 +28,7 @@ runs:
 
     - name: Get previous version
       id: previous_version
-      run: echo ::set-output "name=previous_version::$( git tag | grep -P "^v[0-9]+\\.[0-9]+\\.[0-9]+" | sort -V | tail -n 1 )"
+      run: echo "previous_version=$( git tag | grep -P "^v[0-9]+\\.[0-9]+\\.[0-9]+" | sort -V | tail -n 1 )" >> "$GITHUB_OUTPUT"
       shell: bash
 
     - name: Get current version
